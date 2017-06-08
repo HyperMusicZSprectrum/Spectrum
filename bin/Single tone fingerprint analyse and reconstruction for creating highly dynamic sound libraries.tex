@@ -1,0 +1,179 @@
+\documentclass[a4paper,12pt]{report}
+
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=3cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{mathpazo}
+
+\title{\LARGE {\bf Single tone fingerprint analyse and reconstruction for creating highly dynamic sound libraries}\\
+	\vspace*{6mm}
+}
+\author{Karsten Dehren}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+
+\begin{document}
+	
+	\maketitle
+	
+	
+	\tableofcontents
+		
+	\chapter{Motivation}
+	
+	During the development of a note editing software I had to decide between using a standard sound library based on wave (.wav) files or to develop an own format. 
+	\\The benefits of using a sound library which is based on standard wave files are first of all the easy set up of these files and then that for basic tones no additional calculations are necessary. But the disadvantages are these libraries are usually inflexible and hard to edit at runtime and apart from that it takes a relative long time to load the files.
+	\\In order to avoid these problems this paper will define a new strategy to manage and create sound libraries including a file format to define a fingerprints of each tone and an optimized non-redundant data structure.
+	
+	\section{State of the art}
+	
+	The probably most common way of creating a sound library is a list of native wave files which contain the -- in average 3 to 5 second long -- information of one sound. After being loaded the data can combined with existing informations by adding to overlay sounds and concatenation to create a sequence of sounds or an entire song.
+	\\This strategy works perfectly fine as long as there are no sound modulations necessary. But if the user wants to change the note -- for example a bended note on a guitar or a vibrating tone -- the software has to recalculate the file or to dynamically drop data segments to adjust the frequency. Neither of these strategies can maintain the sound quality because of a quick recalculation of sound files can’t start a detailed analyse what leads to a sound calculation with flawed or maybe even wrong parameters. And beside of that dropping data segments will directly influence the sound quality by ignoring details that could have had influenced the sound.
+			
+	\section{Benefits}
+	
+	The Dynamically Transformable Single Tone Fingerprint file system and the Cloud Repository data structure offers developers an interface to build a flexible and composite sound library which enables users to add own sounds to the application by recording only one tone. The fingerprint – extracted from the recorded tone – can be transferred into every note and in addition to that tone and note modulations cause just a minor increase of the calculation efforts. Apart from that developers are able to create and add plug-ins to customize the functionalities and overall behaviour of the underlying system.
+	
+	\chapter{Definitions}
+	
+	\section{Musical definitions}
+	This section defines common musical terms and the context they will be used in. These might not be the standard definitions -- because in normal use this terms have a logical overlapping -- but in this context it is important to differentiate between them to understand the following explanations and calculations.
+	\subsection{Amplitude}
+	An Amplitude 
+	\begin{math}
+		\mathcal{A}
+	\end{math} 
+	is a factor which defines the starting volume of a sine wave. It can only take values between 0 and 1.
+	\begin{equation*}
+		\mathcal{A}\subset\R, \quad \mathcal{A}=[0, 1]
+	\end{equation*}
+	
+	\subsection{Sine wave decay function}
+	The decay
+	\begin{math}
+		\gamma
+	\end{math}
+	is a linear or exponential function which defines how fast a sine wave will decay over time.
+	\begin{equation*}
+		x\in\N, \quad \gamma(x)=m*(-x)+b \; \lor \; \gamma(x)=e^{f(x)}
+	\end{equation*}
+	
+	\subsection{Tone}
+	A tone is a single sine wave with or without decay function. In addition to that it has an undefined factor or function which defines the wave amplitude. 
+	\begin{equation*}
+		T(x)=\mathcal{A} * \gamma(x) * sin(x) \quad x\in\N
+	\end{equation*}
+	It can be combined with other tones by adding to overlap two tones.
+	\begin{equation*}
+		f:T \times T \rightarrow T, \; A,B \mapsto A+B, \quad A,B\in T
+	\end{equation*}
+	\begin{equation*}
+		A,B \in T \qquad f(A,B)=\sum_{i=0}^{\max\{|A| ,|B|\}} A(i)+B(i)
+	\end{equation*}
+	
+	\subsection{Modulated Tone}
+	A modulated tone is a specialization of standard tones. In addition to the tone properties it can have a frequency which is changing by time. The factor which changes the frequency will be defined in at least one additional function. IF the factor is defined by multiple functions they have to have a starting and terminating index to avoid function overlapping ambiguous information.
+	\begin{equation*}
+		T(x)=\mathcal{A} * \gamma(x) * sin(f(x)), \quad x\in\N
+	\end{equation*}
+	
+	\subsection{Note}
+	A note
+	\begin{math}
+	\phi
+	\end{math} 
+	is a vector of standard and modulated tones which will be played at the same time. These tones can be read individually or as unit what will transform them into a complex tone. Beside of that the note defines the starting amplitudes of each tone.
+	\begin{equation*}
+		\phi=
+		\begin{pmatrix}
+			T_1\\
+			T_2\\
+			\vdots\\
+			T_n
+		\end{pmatrix}
+	\end{equation*}
+	
+	\subsection{Complex tone}
+	A complex tone 
+	\begin{math}
+		\widehat{\phi}
+	\end{math}
+	is the sum of tones from one note.
+	\begin{equation*}
+		\widehat{\phi}=\sum_{i=1}^{n}T_i, \quad T_1, \dots, T_n\in\phi
+	\end{equation*}
+	
+	\subsection{Sound}
+	A Sound
+	\begin{math}
+		\Phi
+	\end{math}
+	is matrix Notes which defines their concatenation. It can also be defined as vector of complex tones. In this case it will be called 
+	\begin{math}
+		\widehat{\Phi}
+	\end{math}.
+	\begin{equation*}
+		\Phi_{m,n}= 
+		\begin{pmatrix}
+			\phi_{11}&&\phi_{1n}\\
+			&\ddots&\\
+			\phi_{m1}&&\phi_{mn}
+
+		\end{pmatrix}
+	\end{equation*}
+	\begin{equation*}
+		\widehat{\Phi}_n=
+		\begin{pmatrix}
+			\widehat{\phi}_1&\dots&\widehat{\phi}_n
+		\end{pmatrix}
+	\end{equation*}
+	
+	\section{Sound fingerprint format}
+	\subsection{Contained information}
+	\subsection{Data composition}
+
+	\section{File format .DTSTF}
+	\subsection{File allocation}
+	\subsection{File Header}
+	\subsection{File Body}
+
+	\section{Simplifying definitions}
+	\subsection{Analyse data regions}
+	
+	\chapter{Backgrounds}
+	
+	\section{Physical Background}
+	\subsection{Sinus wave behaviour}
+	\subsection{Fourier transformation}
+	
+	\section{Musical theory}
+	\subsection{Notes in general}
+	\subsection{Harmonic series}
+	
+	\section{.WAV file format}
+	\subsection{Basic structure}
+	\subsection{Data calculation}
+	\subsection{Data validation}
+	\chapter{Analyse}
+	\section{Data allocation}
+	\section{Base frequency calculation}
+	\section{Amplitude calculation}
+	\section{Exponential decay definition}
+	\section{Fingerprint construction}
+	\chapter{Reconstruction}
+	\section{Fingerprint analyse}
+	\section{Sine wave calculation}
+	\section{Amplitude calculation}
+	\section{.WAV file construction}
+	\chapter{Programming}
+	\section{Objects}
+	\section{Data structure}
+	\section{Data behaviour}
+	\section{Reconstructing calculations}
+	\chapter{Conclusion}
+	\chapter{Sources}
+		
+\end{document}

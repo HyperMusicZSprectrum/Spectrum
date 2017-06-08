@@ -1,0 +1,36 @@
+\subsection{Note}
+	A note $ \phi $	is a vector of standard and modulated tones which will be played at the same time. These tones can be read individually or as unit what will transform them into a complex note. Beside of that the note defines the starting amplitudes of each tone.
+	\begin{equation}\label{NoteRef}
+		\phi=
+		\begin{pmatrix}
+			T_1\\
+			T_2\\
+			\vdots\\
+			T_n
+		\end{pmatrix}
+	\end{equation}
+	
+\subsection{Complex note}
+	A complex tone $ \widehat{\phi} $ is the sum of tones from one note.
+	\begin{equation}\label{CompNoteRef}
+	\widehat{\phi}=\sum_{i=1}^{n}T_i, \quad T_1, T_2, \dots, T_n\in\phi
+	\end{equation}
+	
+\subsection{Sound}
+	A Sound $ \Phi $ is matrix of Notes which defines their concatenation. 
+	\begin{equation}\label{SoundRef}
+		\Phi_{m,n}= 
+		\begin{pmatrix}
+			\phi_{11}&&\phi_{1n}\\
+			&\ddots&\\
+			\phi_{m1}&&\phi_{mn}
+
+		\end{pmatrix}
+	\end{equation}
+	It can also be defined as vector of complex notes. In this case it will be called $ \widehat{\Phi} $.
+	\begin{equation}\label{CompSoundRef}
+		\widehat{\Phi}_n=
+		\begin{pmatrix}
+			\widehat{\phi}_1&\dots&\widehat{\phi}_n
+		\end{pmatrix}
+	\end{equation}

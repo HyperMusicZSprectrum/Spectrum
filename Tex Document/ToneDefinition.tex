@@ -1,0 +1,16 @@
+\subsection{Tone}
+	A tone is a single sine wave with or without decay function. In addition to that it has an undefined factor or function which defines the wave amplitude. 
+	\begin{equation}\label{ToneRef}
+		T(x)=\mathcal{A} * \gamma(x) * sin(x) \quad x\in\R
+	\end{equation}
+	It can be combined with other tones by adding to overlap two tones.
+	\begin{eqnarray}\label{ToneOperationRef}
+		f:T \times T \rightarrow T, \quad A,B \mapsto A+B, \quad A,B\in T\nonumber \\
+		A,B \in T \qquad f(A,B)=\sum_{i=0}^{\max\{|A| ,|B|\}} A(i)+B(i) 
+	\end{eqnarray}
+
+\subsection{Modulated Tone}
+	A modulated tone is a specialization of standard tones. In addition to the tone properties it can have a frequency which is changing by time. The factor which changes the frequency will be defined in at least one additional function. IF the factor is defined by multiple functions they have to have a starting and terminating index to avoid function overlapping ambiguous information.
+	\begin{equation}\label{ModToneRef}
+		T(x)=\mathcal{A} * \gamma(x) * sin(f(x)), \quad x\in\R
+	\end{equation}

@@ -1,0 +1,83 @@
+%Dokumentklasse
+\documentclass[a4paper,12pt]{scrreprt}
+\usepackage[left= 2.5cm,right = 2cm, bottom = 4 cm]{geometry}
+%\usepackage[onehalfspacing]{setspace}
+% ============= Packages =============
+
+% Dokumentinformationen
+\usepackage[
+	pdftitle={Single tone fingerprint analyse and reconstruction for creating highly dynamic sound libraries},
+	pdfsubject={},
+	pdfauthor={Karsten Dehren},
+	pdfkeywords={},	
+	%Links nicht einrahmen
+	hidelinks
+]{hyperref}
+
+
+% Standard Packages
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx, subfig}
+\graphicspath{{img/}}
+\usepackage{fancyhdr}
+\usepackage{lmodern}
+\usepackage{color}
+\usepackage[table]{xcolor}
+\usepackage{multirow}
+\usepackage{xcolor,colortbl}
+\usepackage{amsmath}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Nn}{\mathbb{N}_0}
+\newcommand{\Z}{\mathbb{Z}}
+\newcolumntype{d}{>{\columncolor{lightgray}}c}
+
+
+% zusätzliche Schriftzeichen der American Mathematical Society
+\usepackage{amsfonts}
+\usepackage{amsmath}
+
+%nicht einrücken nach Absatz
+%\setlength{\parindent}{0pt}
+
+
+% ============= Kopf- und Fußzeile =============
+\pagestyle{fancy}
+%
+\lhead{}
+\chead{}
+\rhead{\slshape \leftmark}
+%%
+\lfoot{}
+\cfoot{\thepage}
+\rfoot{}
+%%
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ============= Package Einstellungen & Sonstiges ============= 
+%Besondere Trennungen
+\hyphenation{De-zi-mal-tren-nung}
+
+
+% ============= Dokumentbeginn =============
+
+\begin{document}
+%Seiten ohne Kopf- und Fußzeile sowie Seitenzahl
+\pagestyle{empty}
+
+\include{Title}
+
+% pagestyle für gesamtes Dokument aktivieren
+\pagestyle{fancy}
+
+\tableofcontents
+
+\include{Motivation}
+
+\include{Definition}
+
+\end{document}

@@ -1,0 +1,12 @@
+\chapter{Motivation}
+	During the development of a note editing software we had to decide between using a standard sound library based on wave (.wav) files or developing an own format. 
+	\\The benefits of using a sound library based on standard wave files are first of all the easy set up of these files and then that for basic notes no additional calculations are necessary. But the disadvantages are that these libraries are usually inflexible and hard to edit at runtime and apart from that it takes a relative long time to load the files.
+	\\In order to avoid these problems this paper will define a new strategy to manage and create sound libraries including a file format to define a fingerprints of each instrument and an optimized non-redundant data structure.
+	
+	\section{State of the art}
+	The probably most common way of creating a sound library is a list of native wave files which contain the -- in average 3 to 5 second long -- data of one note. After being loaded the data can combined with existing informations by adding to overlay notes and concatenation to create a sounds or an entire song.
+	\\This strategy works perfectly fine as long as there are no sound modulations necessary. But if the user wants to change the note -- for example a bended note on a guitar or a vibrating tone -- the software has to recalculate the file or to dynamically drop data segments to adjust the frequency. Neither of these strategies can maintain the sound quality because of a quick recalculation of sound files can’t start a detailed analyse what leads to a sound calculation with flawed or maybe even wrong parameters. And beside of that dropping data segments will directly influence the sound quality by ignoring details that could have had influenced the sound.
+			
+	\section{Benefits}
+	The Dynamically Transformable Single Note Fingerprint file system and the Cloud Repository data structure offers developers an interface to build a flexible and composite sound library which enables users and developers to add own sounds to the application by recording only one note. The fingerprint -- extracted from the recorded note -- can be transferred into every note and in addition to that tone and note modulations cause just a minor increase of the calculation effort. Apart from that developers are able to create and add plug-ins to customize the functionalities and overall behaviour of the underlying system.
+	
